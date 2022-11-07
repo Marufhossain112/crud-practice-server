@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
 });
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const { query } = require("express");
 const uri =
   "mongodb+srv://user404:adaJMCMJT3PV1ynq@cluster0.efpjwcu.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
@@ -25,10 +26,18 @@ async function run() {
     const userCollection = client.db("userDb").collection("users");
     const userCollection2 = client.db("userDb2").collection("users2");
 
+    // post endpoints
     app.post("/informs", async (req, res) => {
       const result = await userCollection2.insertOne(req.body);
       // console.log(result);
-      res.send(result)
+      res.send(result);
+    });
+    // get data from database
+    app.get("/informs", async (req, res) => {
+      const query = {};
+      const cursor = userCollection2.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     });
   } finally {
   }
