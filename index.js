@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
   console.log("I am running on the Home...");
 });
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const { query } = require("express");
 const uri =
   "mongodb+srv://user404:adaJMCMJT3PV1ynq@cluster0.efpjwcu.mongodb.net/?retryWrites=true&w=majority";
@@ -37,6 +37,13 @@ async function run() {
       const query = {};
       const cursor = userCollection2.find(query);
       const result = await cursor.toArray();
+      res.send(result);
+    });
+    // delete items
+    app.delete("/informs/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection2.deleteOne(query);
       res.send(result);
     });
   } finally {
